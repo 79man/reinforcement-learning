@@ -49,7 +49,7 @@ class Bandit(object):
         self.R = [[] for i in range(n)]
 
         # Rewards values used by the agent to calculate step-reward
-        self.Rewards = np.random.randint(-5, 5, n) if not rewards else rewards
+        self.Rewards = np.array(np.random.randint(-5, 5, n) if not rewards else rewards)
 
         self.last_action = None
 
@@ -76,10 +76,18 @@ class Bandit(object):
             )
 
     def summary(self):
-        print(f'Rewards: {self.Rewards}')
-        print(f'N(a): {list(self.N)}')
-        # print(f'R(a): {self.R}')
-        print(f'Q(a): {list(self.Q)}')
+        print(f'Actions: {["A-" + str(act) for act in self.actions]}')
+        print(f'Rewards: {list(self.Rewards)}')        
+        
+        max_used_action_index = np.where(self.N == self.N.max())[0][0]
+        max_used_action = "A-" + str(self.actions[max_used_action_index])
+        max_reward_index = np.where(self.Rewards == self.Rewards.max())[0][0]
+        max_reward_action = "A-" + str(self.actions[max_reward_index])
+        
+        print(f'Selected Actions N(a): {list(self.N)}')
+        print(f'Max_Selected(a): {max_used_action}, Max_Reward(a):{max_reward_action}')
+        print(f'Is Max_Reward Action Used Most: {max_used_action==max_reward_action}')
+        print(f'Calculated Value Q(a): {list(self.Q)}')
 
 
 if __name__ == "__main__":
