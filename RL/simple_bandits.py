@@ -108,7 +108,7 @@ def main():
     action_space_n = 10
 
     # Selecting the average Value Creation method from [SampleAverage, ExponentialRecencyWeightedAverage]
-    avg_val_method = ExponentialRecencyWeightedAverage()
+    avg_val_method = SampleAverage()#ExponentialRecencyWeightedAverage()
 
     # For each policy run the simulation for X epochs with Y iterations each
     training_epochs = 100  # Number of training epochs
@@ -199,10 +199,10 @@ def main():
 
                 legend_lbl = legend_lbl + policy_to_use.name()
 
-                axs[r_axis][c_axis].scatter(
-                    x=curr_record['data']['iter'],
-                    y=curr_record['data']['values'],
-                    label=legend_lbl                 
+                axs[r_axis][c_axis].plot(
+                    np.array(curr_record['data']['iter']),
+                    np.array(curr_record['data']['values']),
+                    label=legend_lbl
                 )
             
             # Common reward table for all the polices
