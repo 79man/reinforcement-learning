@@ -12,6 +12,7 @@ class Policy(object):
     def name(self):
         return self._name
 
+
 class RandomPolicy(Policy):
 
     def __init__(self, name="Random Policy"):
@@ -20,6 +21,7 @@ class RandomPolicy(Policy):
     def select_action(self, Q, **kwargs):
         n = len(Q)
         return np.random.randint(n)
+
 
 class GreedyPolicy(Policy):
 
@@ -30,6 +32,7 @@ class GreedyPolicy(Policy):
         argmax_list = np.flatnonzero(Q == Q.max())
         return np.random.choice(argmax_list)
 
+
 class EpsilonGreedyPolicy(Policy):
 
     def __init__(self, epsilon=0.1):
@@ -39,7 +42,6 @@ class EpsilonGreedyPolicy(Policy):
         self.epsilon = epsilon
         self.rp = RandomPolicy()
         self.gp = GreedyPolicy()
-        
 
     def select_action(self, Q, **kwargs):
         sample_prob = np.random.uniform()
@@ -49,51 +51,27 @@ class EpsilonGreedyPolicy(Policy):
         else:
             return self.gp.select_action(Q)
 
-# Abstract Base class
-class Average(object):
 
-    def calculate(self, **kwargs):
-        pass
+class UpperConfidenceBoundPolicy(Policy):
 
-    def name(self):
-        return "Abstract Average"
+    def __init__(self, c=1):
+        self.c = c
+        name = "UCB Policy"
+        super().__init__(name)
 
-class SampleAverage(Average):
+    def select_action(self, Q, N, t):
 
-    # Qn+1 =  Qn + (1/n)[(Rn - Qn)]
-    def calculate(
-            self,         
-            Q,
-            last_action,
-            last_reward,
-            N,
-            **kwargs
-    ):
-        Q[last_action] += (last_reward - Q[last_action]) / N[last_action]
+        ucb = np.array(
+            [
+                self.__ucb__(action, q_action, N, t)
+                for action, q_action in np.ndenumerate(Q)
+            ]
+        )
+        action = np.random.choice(np.flatnonzero(ucb == ucb.max()))
+        return action
 
-    def name(self):
-        return "Sample Average"
-    
-class ExponentialRecencyWeightedAverage(Average):
-    #               n
-    # (1-α)^n Q1 +  Σ  α(1 − α)^(n−i) Ri
-    #              i=1
-    def calculate(
-            self,
-            Q,
-            last_action,
-            last_reward,
-            Q_init,
-            R,
-            alpha,
-            **kwargs
-    ):
-        n = len(R[last_action])
-        
-        Q[last_action] = pow(1 - alpha, n) * Q_init[last_action]
-        
-        for i in range(1, n):
-            Q[last_action] += alpha * pow(1 - alpha, n - i) * R[last_action][i]
-
-    def name(self):
-        return "Exponential Recency Weighted Average"
+    def __ucb__(self, action, q_action, N, t):
+        if N[action] == 0:
+            return float('inf')
+        else:
+            return q_action + self.c * math.sqrt(math.log(t) / N[action])
