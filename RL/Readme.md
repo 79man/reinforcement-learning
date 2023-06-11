@@ -1,3 +1,18 @@
+## Learning curve Plot with constant Reward over 4Iterations
+![Learning curve with constant Reward over 4Iterations](images/LearningCurve_constantReward_4Iterations.png?raw=true "Learning curve with constant Reward over 4Iterations")
+
+## Learning curve with uniform random Reward over 4Iterations
+![Learning curve with random Reward over 4Iterations](images/LearningCurve_randomReward_4Iterations.png?raw=true "Learning curve with random Reward over 4Iterations")
+
+## Learning curve constant Reward including UCB
+![Learning curve constant Reward including UCB](images/LearningCurve_constantReward_includingUCB.png?raw=true "Learning curve constant Reward including UCB")
+
+## Observations
+1. Random Policy explores all actions more or less equally and average reward seems to be the lowest among the three policies.
+2. Greedy Policy's reward is inconsistent. It sticks with the first +ve reward action it learns. After that it does not explore anymore. It is not guaranteed to learn the highest +ve reward action. If it learns the highest +ve reward action its result will be highest.
+3. Epsilon-Greedy Policy's reward is more consistent. Given a low epsilon value, it keeps exploring with P(epsilon) even after discovering the +ve reward actions. Also given enough iterations, it is guaranteed to discovers the highest +ve reward action. It consistently exploit the highest +ve reward action maximum number of times.
+4. Upper Confidence Bound Policy is basically an improvement over ϵ-greedy action selection. It forces the non-greedy actions to be tried, but not indiscriminately. Instead Actions with higher value estimates will be picked more often. Hence UCB converges fast to the ideal reward and maintains the curve better than ϵ-greedy.
+
 # Output
 
 ## Test Run 1 
@@ -423,8 +438,6 @@
   }
 ]
 ```
-## Learning Curve Plot
-![Learning curve with constant Reward over 4Iterations](images/LearningCurve_constantReward_4Iterations.png?raw=true "Learning curve with constant Reward over 4Iterations")
 
 ## Test Run 2
 
@@ -850,14 +863,3 @@
 ]
 
 ```
-## Learning Curve Plot
-![Learning curve with random Reward over 4Iterations](images/LearningCurve_randomReward_4Iterations.png?raw=true "Learning curve with random Reward over 4Iterations")
-
-## Learning curve constant Reward including UCB
-![Learning curve constant Reward including UCB](images/LearningCurve_constantReward_includingUCB.png?raw=true "Learning curve constant Reward including UCB")
-
-## Observations
-1. Random Policy explores all actions more or less equally and average reward seems to be the lowest among the three policies.
-2. Greedy Policy's reward is inconsistent. It sticks with the first +ve reward action it learns. After that it does not explore anymore. It is not guaranteed to learn the highest +ve reward action. If it learns the highest +ve reward action its result will be highest.
-3. Epsilon-Greedy Policy's reward is more consistent. Given a low epsilon value, it keeps exploring with P(epsilon) even after discovering the +ve reward actions. Also given enough iterations, it is guaranteed to discovers the highest +ve reward action. It consistently exploit the highest +ve reward action maximum number of times.
-4. Upper Confidence Bound Policy is basically an improvement over ϵ-greedy action selection. It forces the non-greedy actions to be tried, but not indiscriminately. Instead Actions with higher value estimates will be picked more often. Hence UCB converges fast to the ideal reward and maintains the curve better than ϵ-greedy.

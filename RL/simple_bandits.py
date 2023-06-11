@@ -58,7 +58,7 @@ def main():
         for c_axis in range(Num_cols):
             # Using a Stationary Reward for each evaluation cycle
             # stationary_reward = np.array([-1, -2, -5, -1, 6, 2, -3, 4, 0, 1])
-            stationary_reward = np.random.normal(-5, 5, size=action_space_n).astype(int)
+            stationary_reward = np.random.normal(0, 5, size=action_space_n).astype(int)
 
             for policy_to_use in policies_to_evaluate:
                 curr_record = {}
