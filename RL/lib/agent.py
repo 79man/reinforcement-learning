@@ -73,7 +73,7 @@ class Bandit(object):
 
     def summary(self):
         retVal = {}
-        retVal['Actions'] = ["A-" + str(act) for act in self.actions]
+
         max_used_action_index = np.where(self.N == self.N.max())[0][0]
         max_used_action = "A-" + str(self.actions[max_used_action_index])
 
@@ -81,9 +81,12 @@ class Bandit(object):
         # max_reward_action = "A-" + str(self.actions[max_reward_index])
 
         retVal['N(a)'] = str(list(self.N))
-        retVal['Max_Selected(a)'] = max_used_action        
-        # print(f'Is Max_Reward Action Used Most: {max_used_action==max_reward_action}')
-        # print(f'Reward History: {self.R[max_used_action_index]}')
+        sum_Na = np.sum(self.N)
+        retVal['Actions'] = ["A-" + str(act) for act in self.actions]
+        retVal['Actions'].append([str(round((n/sum_Na)*100, 2)) +'%' for n in self.N])
+
+        retVal['Max_Selected_Action'] = max_used_action
+
         retVal['Q(a)'] = str(list(self.Q))
 
         return retVal

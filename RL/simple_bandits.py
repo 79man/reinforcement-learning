@@ -23,6 +23,7 @@ from progress.bar import Bar
 
 
 def main():
+    bVerbose = False
     # Hyperparameters
     action_space_n = 10
 
@@ -77,9 +78,9 @@ def main():
                 curr_record['avm'] = avg_val_method.name()
                 curr_record['rewards'] = str(stationary_reward)
                 curr_record['best_reward'] = stationary_reward.max()
+                best_action = np.argmax(stationary_reward)
                 curr_record['best_action'] = "A-" + \
-                    str(np.where(stationary_reward ==
-                        stationary_reward.max())[0][0])
+                    str(best_action)
                 
                 # print(f'rewards: {stationary_reward}')
                 # print(f'Best Reward: {stationary_reward.max()}, Best Action:{"A-" + str(np.where(stationary_reward == stationary_reward.max())[0][0])}')
@@ -110,7 +111,6 @@ def main():
                 curr_record['training_iterations'] = training_epochs * iterations
                 curr_record['time_elapsed'] = (end_time - start_time).total_seconds()
                 curr_record['summary'] = N_arm_bandit.summary()
-                print(f'{curr_record}')                
                 
                 # Scatter plotting the learning curve
                 legend_lbl = ""
@@ -124,6 +124,13 @@ def main():
                     np.array(curr_record['data']['values']),
                     label=legend_lbl
                 )
+
+                if not bVerbose:
+                    # Print extra details of the run only if explicitly requested
+                    curr_record['data']['iter'] = []
+                    curr_record['data']['values'] = []
+                
+                print(f'{curr_record}')
             
             # Common reward table for all the polices
             the_table = axs[r_axis][c_axis].table(
@@ -149,6 +156,7 @@ def main():
     # Display the plot
     plt.show()
 
+    
 
 if __name__ == "__main__":
     main()
